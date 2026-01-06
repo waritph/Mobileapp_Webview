@@ -35,29 +35,28 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
     _controller = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onPageStarted: (url) {
-          print("Page Start Loading: $url");
-        },
-        onPageFinished: (url) {
-          print("Page finished loading $url");
-        },
-        onNavigationRequest: (request) {
-          if(request.url.startsWith("https://flutter.dev/")){
-            return NavigationDecision.navigate;
-          }
-          print("Blocked Navagation to :${request.url}");
-          return NavigationDecision.prevent;
-        },
-      ),
-    
-    )
-     //..loadRequest(Uri.parse("https://flutter.dev/"));
-     _controller.loadRequest(Uri.parse("https://flutter.dev/"));
-     _controller.loadFlutterAsset('assets/index.html');
-   
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onPageStarted: (url) {
+            print("Page Start Loading: $url");
+          },
+          onPageFinished: (url) {
+            print("Page finished loading $url");
+          },
+          onNavigationRequest: (request) {
+            if (request.url.startsWith("https://flutter.dev/")) {
+              return NavigationDecision.navigate;
+            }
+            print("Blocked Navagation to :${request.url}");
+            return NavigationDecision.prevent;
+          },
+        ),
+      ); // ✅ ปิดวงเล็บ/ปิด chain ให้ครบตรงนี้
+
+    //..loadRequest(Uri.parse("https://flutter.dev/"));
+    _controller.loadRequest(Uri.parse("https://flutter.dev/"));
+    _controller.loadFlutterAsset('assets/index.html');
   }
 
   @override
@@ -82,16 +81,12 @@ class _MyHomePageState extends State<MyHomePage> {
               }
             },
           ),
-
           IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () => _controller.reload()
-          )
-          
+              icon: Icon(Icons.refresh),
+              onPressed: () => _controller.reload()),
         ],
-        ),
-        body: WebViewWidget(controller: _controller),
-      
+      ),
+      body: WebViewWidget(controller: _controller),
     );
   }
 }
